@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🌈 Spin for a Good Intention</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      background: linear-gradient(to top right, #e0f7fa, #ffffff);
+      padding: 50px;
+      color: #333;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      color: #4a148c;
+    }
+
+    #wheel {
+      width: 300px;
+      height: 300px;
+      border: 12px solid #4a148c;
+      border-radius: 50%;
+      margin: 40px auto;
+      position: relative;
+      transition: transform 4s cubic-bezier(0.25, 1, 0.5, 1);
+      background: conic-gradient(
+        #ff0000 0% 14.28%,
+        #ff7f00 14.28% 28.56%,
+        #ffff00 28.56% 42.84%,
+        #00ff00 42.84% 57.12%,
+        #0000ff 57.12% 71.4%,
+        #4b0082 71.4% 85.68%,
+        #8b00ff 85.68% 100%
+      );
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    }
+
+    #wheel::after {
+      content: "⬆";
+      position: absolute;
+      top: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 2em;
+      color: #4a148c;
+    }
+
+    button {
+      padding: 12px 25px;
+      font-size: 1.1em;
+      background: #4a148c;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background: #6a1b9a;
+    }
+
+    #result {
+      margin-top: 30px;
+      font-size: 1.6em;
+      color: #4a148c;
+      min-height: 50px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🌈 Spin for a Good Intention</h1>
+  <p>Let the rainbow of kindness guide you today ✨</p>
+
+  <div id="wheel"></div>
+  <button onclick="spinWheel()">Spin the Wheel</button>
+
+  <div id="result">Your intention will appear here...</div>
+
+  <audio id="dingSound" src="ding.mp3"></audio>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    const intentions = [
+      "🌟 Be kind to yourself today",
+      "📞 Call someone you miss",
+      "💧 Drink water and take a deep breath",
+      "📖 Read something uplifting",
+      "🧘 Practice 2 minutes of stillness",
+      "🌿 Step outside and feel nature",
+      "💬 Compliment someone sincerely"
+    ];
+
+    let angle = 0;
+
+    function spinWheel() {
+      const wheel = document.getElementById("wheel");
+      const result = document.getElementById("result");
+      const sound = document.getElementById("dingSound");
+
+      result.textContent = "Spinning... 🌈";
+
+      const extraDegrees = Math.floor(Math.random() * 360) + 1440;
+      angle += extraDegrees;
+
+      wheel.style.transform = `rotate(${angle}deg)`;
+
+      setTimeout(() => {
+        const random = Math.floor(Math.random() * intentions.length);
+        result.textContent = intentions[random];
+
+        sound.currentTime = 0;
+        sound.play();
+
+        confetti({
+          particleCount: 120,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      }, 4200);
+    }
+  </script>
+
+</body>
+</html>
