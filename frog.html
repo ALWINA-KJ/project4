@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🐸 Frog Mood Detector</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive;
+      text-align: center;
+      padding: 50px;
+      background-color: #d0f0c0;
+    }
+
+    h1 {
+      font-size: 2em;
+    }
+
+    input[type="range"] {
+      width: 300px;
+      margin: 20px 0;
+    }
+
+    .frog {
+      font-size: 100px;
+      margin-top: 20px;
+      display: inline-block;
+      transition: transform 0.3s ease;
+    }
+
+    .wiggle {
+      animation: wiggle 0.4s ease;
+    }
+
+    @keyframes wiggle {
+      0%   { transform: rotate(0deg); }
+      25%  { transform: rotate(10deg); }
+      50%  { transform: rotate(-10deg); }
+      75%  { transform: rotate(10deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    .mood {
+      font-size: 1.5em;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🐸 Frog Mood Detector</h1>
+  <p>Set the Ribbit Level to check your frog's mood!</p>
+
+  <input type="range" id="ribbitRange" min="0" max="100" value="50">
+  <br>
+  <button onclick="detectMood()">Detect Mood</button>
+
+  <div class="frog" id="frogEmoji">🐸</div>
+  <div class="mood" id="moodResult">Waiting for ribbit...</div>
+
+  <audio id="ribbitSound" src="ribbit.mp3"></audio>
+
+  <script>
+    const frog = document.getElementById("frogEmoji");
+    const moodText = document.getElementById("moodResult");
+    const ribbitSound = document.getElementById("ribbitSound");
+
+    const moodMessages = {
+      sleepy: ["😴 Sleepy frog... barely ribbiting.", "Zzz... dreaming of flies."],
+      calm: ["😐 Meh... it's a chill frog day.", "Just chilling on a lily pad."],
+      happy: ["😀 Happy ribbits all around!", "Yay! Frog found a worm!"],
+      hyper: ["🚨 RIBBIT ALERT! Frog is hyper!", "Frog drank too much pond water 😵"]
+    };
+
+    const frogEmojis = {
+      sleepy: "😪",
+      calm: "🐸",
+      happy: "😊",
+      hyper: "🤪"
+    };
+
+    function getRandomFromArray(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function detectMood() {
+      const ribbitLevel = document.getElementById("ribbitRange").value;
+      let moodKey = "calm";
+
+      if (ribbitLevel < 20) moodKey = "sleepy";
+      else if (ribbitLevel < 50) moodKey = "calm";
+      else if (ribbitLevel < 80) moodKey = "happy";
+      else moodKey = "hyper";
+
+      const moodMessage = getRandomFromArray(moodMessages[moodKey]);
+      const emoji = frogEmojis[moodKey];
+
+      moodText.textContent = moodMessage;
+      frog.textContent = emoji;
+
+      frog.classList.remove("wiggle");
+      void frog.offsetWidth; // Reset animation
+      frog.classList.add("wiggle");
+
+      ribbitSound.currentTime = 0;
+      ribbitSound.play();
+    }
+  </script>
+
+</body>
+</html>
